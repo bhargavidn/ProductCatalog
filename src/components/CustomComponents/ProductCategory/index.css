@@ -1,0 +1,8 @@
+.product-list{
+   border-bottom:2px solid #adafb1;
+}
+
+.product-left-image{
+    max-height:100%;
+    max-width:100%;
+}
