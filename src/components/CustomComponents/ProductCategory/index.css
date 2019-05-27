@@ -6,3 +6,7 @@
     max-height:100%;
     max-width:100%;
 }
+
+img.disabled {
+    opacity: 0.5;
+  }

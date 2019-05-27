@@ -1,17 +1,31 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import styles from './index.css';
-import myObj from '../../../Common/Filter';
-import productDetails from '../../../Common/ProductDetails';
+import GridView from "../../../images/gridsvg.svg";
+import ListView from "../../../images/listsvg.svg";
+// import myObj from '../../../Common/Filter';
+// import productDetails from '../../../Common/ProductDetails';
 
 
-export default class ProductCategory extends React.Component {
+type Props = {
+  myObj: Array<Object>,
+  productDetails: Array<Object>
+}
+
+export default class ProductCategory extends React.Component<Props> {
+  constructor(props) {
+    super(props);
+    this.state={
+     listView:true
+    }
+  }
+
   renderFilter = () => {
-    return myObj && myObj.map((item, index) => {
+    return this.props.myObj && this.props.myObj.map((item, index) => {
       console.log("myObj", item);
       return (
         <div key={index}>
-          <h2 className={styles.heading}>{item.heading}</h2>
+          <h2 className="">{item.heading}</h2>
           {this.renderItems(item.filterValue)}
         </div>
       )
@@ -27,13 +41,14 @@ export default class ProductCategory extends React.Component {
     })
   }
   renderProductDetails = () => {
-    return productDetails && productDetails.map( (detail,idx) => {
-
+    return this.props.productDetails && this.props.productDetails.map( (detail,idx) => {
       return(
-        <Link to="/product-details">
        <div className="row product-list py-4">
         <div className="col-sm-3" >
-          <img src={detail.productImage} className="product-left-image px-5"/>
+        <Link to={`${this.props.detailLink}${detail.productId}`}>
+          <img alt=""
+           src={detail.productImage} className="product-left-image px-5"/>
+        </Link>
         </div>
         <div className="col-sm-9">
           <h2>{detail.productName}</h2>
@@ -43,22 +58,53 @@ export default class ProductCategory extends React.Component {
           <div>{detail.deliveryType}</div>
         </div>
       </div>
-      </Link>
-      
-   
       )
-
     })
   }
+
   render() {
+    const disabledListClass = ListView ? '' : styles.disabled;
+    const disabledGridClass = ListView ? styles.disabled : '';
     return (
-      <div className="row">
+      <div>
+       <div className="row">
+       <div className="offset-sm-10 col-sm-1 text-right">
+        <button 
+          variant="ghost"
+          onKeyPress={() => false}
+          onClick={() => this.setState({
+            listView :true
+          })}
+        >
+          <img
+            className={`${disabledListClass}`}
+            src={ListView}
+            alt=" "
+          />
+        </button>
+        </div>
+        <div className="col-sm-1">
+        <button
+          variant="ghost"
+          onKeyPress={() => false}
+          onClick={() => this.setState({listView:false})}
+        >
+          <img
+            className={`${disabledGridClass}`}
+            src={GridView}
+            alt=" "
+          />
+        </button>
+        </div>
+      </div>
+       <div className="row">
         <div className="col-sm-3 px-4" >
           {this.renderFilter()}
         </div>
         <div className="col-sm-9">
         {this.renderProductDetails()}
         </div> 
+        </div>
       </div>)
   }
 }
